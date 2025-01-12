@@ -1,4 +1,5 @@
 from collections import namedtuple
+from matplotlib import pyplot as plt
 
 RegistroPoblacion = namedtuple('RegistroPoblacion', 'pais, codigo, año, censo')
 
@@ -24,7 +25,18 @@ def filtra_por_paises_y_anyo(poblaciones: list[RegistroPoblacion], anyo: int, pa
     return [(pais, datos[1]) for pais in paises for datos in filtra_por_pais(poblaciones, pais) if anyo == datos[0]]
 
 def muestra_evolucion_poblacion(poblaciones: list[RegistroPoblacion], nombre_o_codigo: str):
-    pass
+    datos = filtra_por_pais(poblaciones, nombre_o_codigo)
+    lista_años, lista_habitantes = zip(*datos) if datos else ([], [])
+    
+    plt.title(f"Evolución de la población de {nombre_o_codigo.capitalize()}")
+    plt.plot(lista_años, lista_habitantes)
+    plt.text(0.01, 0.95, "(a)", transform=plt.gca().transAxes, fontsize=12, weight='bold')
+    plt.show()
 
 def muestra_comparativa_paises_anyo(poblaciones: list[RegistroPoblacion], anyo: int, paises: set[str]):
-    pass
+    datos = filtra_por_paises_y_anyo(poblaciones, anyo, paises)
+    lista_paises, lista_habitantes = zip(*datos) if datos else ([], [])
+    
+    plt.title(f"Población en el año {anyo}")
+    plt.bar(lista_paises, lista_habitantes)
+    plt.show()
