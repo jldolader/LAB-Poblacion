@@ -1,17 +1,19 @@
 from collections import namedtuple
+import csv
 from matplotlib import pyplot as plt
 
 RegistroPoblacion = namedtuple('RegistroPoblacion', 'pais, codigo, año, censo')
 
 def lee_poblaciones(ruta_fichero: str) -> list[RegistroPoblacion]:
     with open(ruta_fichero, 'r', encoding='utf-8') as f:
+        reader = csv.reader(f)
         return [RegistroPoblacion(
                 pais = str(p[0]),
                 codigo = str(p[1]),
                 año = int(p[2]),
                 censo = int(p[3])
             )
-            for p in (l.split(',') for l in f)
+            for p in reader
         ]
 
 def calcula_paises(poblaciones: list[RegistroPoblacion]):
